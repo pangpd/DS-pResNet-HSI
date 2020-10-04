@@ -71,23 +71,27 @@ def loadData(data_path, name, num_components=None):
     return data, labels, num_class, label_names
 
 
-def load_hyper(data_path, name, spatial_size=7, train_percent=0.15, val_percent=0.1,
+def load_hyper(data_path, name, spatial_size=7, use_val=True, n_samples=0.15, train_percent=0.1,
                batch_size=24, components=None, rand_state=None):
     data, labels, num_classes, _ = loadData(data_path, name, components)
     pixels, labels = createImageCubes(data, labels, windowSize=spatial_size, removeZeroLabels=True)
     bands = pixels.shape[-1]
-    X_train, y_train, X_val, y_val, X_test, y_test = split_data_percent(pixels, labels, train_percent, val_percent,
-                                                                        rand_state)
+    X_train, y_train, X_val, y_val, X_test, y_test = split_data_threshold_random(pixels, labels, n_samples,
+                                                                                 train_percent, rand_state=rand_state)
+
+    #X_train, y_train = AugmentData_Gauss_noise(X_train, y_train, rand_state=rand_state)
     del pixels, labels
     train_hyper = HyperData((np.transpose(X_train, (0, 3, 1, 2)).astype("float32"), y_train), None)
     test_hyper = HyperData((np.transpose(X_test, (0, 3, 1, 2)).astype("float32"), y_test), None)
-    val_hyper = HyperData((np.transpose(X_val, (0, 3, 1, 2)).astype("float32"), y_val), None)
+    if use_val:
+        val_hyper = HyperData((np.transpose(X_val, (0, 3, 1, 2)).astype("float32"), y_val), None)
+    else:
+        val_hyper = None
     kwargs = {'num_workers': 1, 'pin_memory': True}
     train_loader = torch.utils.data.DataLoader(train_hyper, batch_size=batch_size, shuffle=True, **kwargs)
     test_loader = torch.utils.data.DataLoader(test_hyper, batch_size=batch_size, shuffle=False, **kwargs)
     val_loader = torch.utils.data.DataLoader(val_hyper, batch_size=batch_size, shuffle=False, **kwargs)
     return train_loader, test_loader, val_loader, num_classes, bands
-
 
 # padding
 def padWithZeros(X, margin=2):
