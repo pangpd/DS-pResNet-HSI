@@ -14,8 +14,11 @@ The Code for "Depth-wise Separable Convolution Neural Network with Residual Conn
 > opencv-python          4.1.1.26
 >
 > scikit-learn           0.22.1
+>
 > sklearn                0.0
+>
 > spectral               0.19
+>
 > torch                  1.0.0
 
 ## Data sets
