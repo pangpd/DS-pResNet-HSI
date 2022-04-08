@@ -1,6 +1,10 @@
 # Depth-wise Separable Convolution Neural Network with Residual Connection for Hyperspectral Image Classification
 The Code for "Depth-wise Separable Convolution Neural Network with Residual Connection for Hyperspectral Image Classification"
 
+If you use this code, please cite our work:  https://github.com/pangpd/DS-pResNet-HSI
+
+Dang, L.; Pang, P.; Lee, J. Depth-Wise Separable Convolution Neural Network with Residual Connection for Hyperspectral Image Classification. Remote Sens. 2020, 12, 3408. doi: 10.3390/rs12203408
+
 
 ## Requirements
 
